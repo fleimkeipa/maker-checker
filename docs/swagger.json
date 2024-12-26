@@ -512,6 +512,9 @@
                     "type": "string",
                     "example": "basic,oauth2"
                 },
+                "user_id": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -588,9 +591,6 @@
                 "password": {
                     "type": "string"
                 },
-                "role_id": {
-                    "type": "integer"
-                },
                 "username": {
                     "type": "string"
                 }
@@ -601,7 +601,6 @@
             "required": [
                 "email",
                 "password",
-                "role_id",
                 "username"
             ],
             "properties": {
@@ -610,9 +609,6 @@
                 },
                 "password": {
                     "type": "string"
-                },
-                "role_id": {
-                    "type": "integer"
                 },
                 "username": {
                     "type": "string"

@@ -523,6 +523,9 @@ const docTemplate = `{
                     "type": "string",
                     "example": "basic,oauth2"
                 },
+                "user_id": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -599,9 +602,6 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "role_id": {
-                    "type": "integer"
-                },
                 "username": {
                     "type": "string"
                 }
@@ -612,7 +612,6 @@ const docTemplate = `{
             "required": [
                 "email",
                 "password",
-                "role_id",
                 "username"
             ],
             "properties": {
@@ -621,9 +620,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
-                },
-                "role_id": {
-                    "type": "integer"
                 },
                 "username": {
                     "type": "string"

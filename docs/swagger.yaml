@@ -8,6 +8,8 @@ definitions:
       type:
         example: basic,oauth2
         type: string
+      user_id:
+        type: string
       username:
         type: string
     type: object
@@ -54,8 +56,6 @@ definitions:
         type: string
       password:
         type: string
-      role_id:
-        type: integer
       username:
         type: string
     required:
@@ -69,14 +69,11 @@ definitions:
         type: string
       password:
         type: string
-      role_id:
-        type: integer
       username:
         type: string
     required:
     - email
     - password
-    - role_id
     - username
     type: object
 info:

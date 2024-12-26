@@ -22,7 +22,6 @@ func GenerateJWT(user *model.User) (string, error) {
 		"id":       user.ID,
 		"username": user.Username,
 		"email":    user.Email,
-		"role":     user.RoleID,
 		"iat":      time.Now().Unix(),
 		"eat":      time.Now().Add(time.Hour * 2).Unix(),
 	})
@@ -112,27 +111,11 @@ func GetOwnerFromToken(c echo.Context) (model.TokenOwner, error) {
 		return model.TokenOwner{}, errors.New("invalid email claims")
 	}
 
-	role, ok := claims["role"].(float64)
-	if !ok {
-		return model.TokenOwner{}, errors.New("invalid role claims")
-	}
-
 	return model.TokenOwner{
 		ID:       id,
 		Username: username,
 		Email:    email,
-		RoleID:   uint(role),
 	}, nil
-}
-
-// GetOwnerFromCtx returns the owner details from the context
-func GetOwnerFromCtx(ctx context.Context) *model.TokenOwner {
-	owner, ok := ctx.Value("user").(model.TokenOwner)
-	if ok {
-		return &owner
-	}
-
-	return nil
 }
 
 // GetOwnerIDFromCtx returns the owner id from the context string type

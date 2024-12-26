@@ -25,7 +25,6 @@ func (rc *UserUC) Create(ctx context.Context, req model.UserCreateRequest) (*mod
 		Username: req.Username,
 		Email:    req.Email,
 		Password: req.Password,
-		RoleID:   req.RoleID,
 	}
 
 	hashedPassword, err := model.HashPassword(req.Password)
@@ -55,7 +54,6 @@ func (rc *UserUC) Update(ctx context.Context, userID string, req model.UserCreat
 		Username: req.Username,
 		Email:    req.Email,
 		Password: req.Password,
-		RoleID:   req.RoleID,
 	}
 
 	hashedPassword, err := model.HashPassword(req.Password)

@@ -14,5 +14,4 @@ type userMongo struct {
 	Email     string             `bson:"email"`
 	Password  string             `bson:"password"`
 	ID        primitive.ObjectID `bson:"_id"`
-	RoleID    uint               `bson:"role_id"`
 }

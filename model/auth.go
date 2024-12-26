@@ -16,14 +16,12 @@ type Register struct {
 	Email           string `json:"email"`
 	Password        string `json:"password" binding:"required"`
 	ConfirmPassword string `json:"confirm_password" binding:"required"`
-	RoleID          uint   `json:"role_id"`
 }
 
 type TokenOwner struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	ID       string `json:"id"`
-	RoleID   uint   `json:"role_id"`
 }
 
 // VerifyPassword verifies if the given password matches the stored hash.

@@ -28,9 +28,6 @@ func main() {
 }
 
 func serveApplication() {
-	// init config
-	// loadConfig()
-
 	// Create a new Echo instance
 	e := echo.New()
 

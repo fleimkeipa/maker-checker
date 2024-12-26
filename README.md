@@ -17,4 +17,4 @@ Maker-checker is a REST API for managing users and messages. It is written in Go
 
 ## API
 
-The API is documented in the `docs` folder. You can access the swagger UI at `http://localhost:1323/swagger/index.html`
+The API is documented in the `docs` folder. You can access the swagger UI at `http://localhost:8080/swagger/index.html`

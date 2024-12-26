@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/fleimkeipa/maker-checker/model"
+	"github.com/fleimkeipa/maker-checker/util"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -77,25 +78,7 @@ func (rc *MsgMongoRepo) Update(ctx context.Context, msgID string, message *model
 }
 
 func (rc *MsgMongoRepo) List(ctx context.Context, opts model.MessageFindOpts) ([]model.Message, error) {
-	filter := bson.M{}
-	if opts.ReceiverID.IsSended {
-		oID, err := primitive.ObjectIDFromHex(opts.ReceiverID.Value)
-		if err != nil {
-			return nil, fmt.Errorf("failed to convert receiver id: %w", err)
-		}
-		filter["receiver_id"] = oID
-		filter["status"] = model.MessageStatusAccepted
-	}
-	if opts.SenderID.IsSended {
-		oID, err := primitive.ObjectIDFromHex(opts.SenderID.Value)
-		if err != nil {
-			return nil, fmt.Errorf("failed to convert sender id: %w", err)
-		}
-		filter["sender_id"] = oID
-	}
-	if opts.Status.IsSended {
-		filter["status"] = opts.Status.Value
-	}
+	filter := rc.listFilters(ctx, opts)
 
 	mongoOptions := options.Find().
 		SetLimit(int64(opts.Limit)).
@@ -184,4 +167,48 @@ func (rc *MsgMongoRepo) internalToMongo(msg *model.Message) (*messageMongo, erro
 		Text:       msg.Text,
 		Status:     msg.Status,
 	}, nil
+}
+
+func (rc *MsgMongoRepo) listFilters(ctx context.Context, opts model.MessageFindOpts) bson.M {
+	filter := bson.M{}
+	if opts.ReceiverID.IsSended {
+		oID, err := primitive.ObjectIDFromHex(opts.ReceiverID.Value)
+		if err != nil {
+			return nil
+		}
+		filter["receiver_id"] = oID
+		filter["status"] = model.MessageStatusAccepted
+	} else if opts.SenderID.IsSended {
+		oID, err := primitive.ObjectIDFromHex(opts.SenderID.Value)
+		if err != nil {
+			return nil
+		}
+		filter["sender_id"] = oID
+	} else {
+		oID, err := primitive.ObjectIDFromHex(util.GetOwnerIDFromCtx(ctx))
+		if err != nil {
+			return nil
+		}
+		filter["$or"] = []bson.M{
+			{"sender_id": oID},
+			{
+				"$and": []bson.M{
+					{"receiver_id": oID},
+					{"status": model.MessageStatusAccepted},
+				},
+			},
+		}
+	}
+
+	if opts.Status.IsSended {
+		oID, err := primitive.ObjectIDFromHex(util.GetOwnerIDFromCtx(ctx))
+		if err != nil {
+			return nil
+		}
+		filter["sender_id"] = oID
+
+		filter["status"] = opts.Status.Value
+	}
+
+	return filter
 }

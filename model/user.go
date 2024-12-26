@@ -5,7 +5,6 @@ import "time"
 type User struct {
 	DeletedAt time.Time `json:"deleted_at"`
 	CreatedAt time.Time `json:"created_at"`
-	Connects  []int     `json:"connects"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`

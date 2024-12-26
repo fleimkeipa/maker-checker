@@ -9,7 +9,6 @@ import (
 type userMongo struct {
 	DeletedAt time.Time          `bson:"deleted_at"`
 	CreatedAt time.Time          `bson:"created_at"`
-	Connects  []int              `bson:"connects"`
 	Username  string             `bson:"username"`
 	Email     string             `bson:"email"`
 	Password  string             `bson:"password"`

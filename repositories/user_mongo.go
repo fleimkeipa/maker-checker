@@ -185,7 +185,6 @@ func (rc *UserMongoRepo) mongoToInternal(u *userMongo) *model.User {
 		Username:  u.Username,
 		Email:     u.Email,
 		Password:  u.Password,
-		Connects:  u.Connects,
 	}
 }
 
@@ -209,6 +208,5 @@ func (rc *UserMongoRepo) internalToMongo(u *model.User) (*userMongo, error) {
 		Username:  u.Username,
 		Email:     u.Email,
 		Password:  u.Password,
-		Connects:  u.Connects,
 	}, nil
 }

@@ -21,6 +21,7 @@ type AuthResponse struct {
 	Type     string `json:"type" example:"basic,oauth2"`
 	Token    string `json:"token"`
 	Username string `json:"username"`
+	UserID   string `json:"user_id"`
 	Message  string `json:"message"`
 }
 

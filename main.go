@@ -10,11 +10,11 @@ import (
 	"github.com/fleimkeipa/maker-checker/repositories"
 	"github.com/fleimkeipa/maker-checker/uc"
 	"github.com/fleimkeipa/maker-checker/util"
-	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 )
 

@@ -93,9 +93,10 @@ func (rc *AuthHandlers) Register(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, AuthResponse{
-		Token:    jwt,
 		Type:     "basic",
+		Token:    jwt,
 		Username: input.Username,
+		UserID:   user.ID,
 		Message:  "Successfully registered in",
 	})
 }
@@ -152,9 +153,10 @@ func (rc *AuthHandlers) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, AuthResponse{
-		Token:    jwt,
 		Type:     "basic",
+		Token:    jwt,
 		Username: input.Username,
+		UserID:   user.ID,
 		Message:  "Successfully logged in",
 	})
 }

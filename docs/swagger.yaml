@@ -1,0 +1,411 @@
+definitions:
+  controller.AuthResponse:
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+      type:
+        example: basic,oauth2
+        type: string
+      username:
+        type: string
+    type: object
+  controller.FailureResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  controller.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  model.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.MessageCreateRequest:
+    properties:
+      receiver_id:
+        type: string
+      text:
+        type: string
+    type: object
+  model.MessageUpdateRequest:
+    properties:
+      status:
+        type: integer
+    type: object
+  model.Register:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      role_id:
+        type: integer
+      username:
+        type: string
+    required:
+    - confirm_password
+    - password
+    - username
+    type: object
+  model.UserCreateRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      role_id:
+        type: integer
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - role_id
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a user to log in by providing a valid username
+        and password.
+      parameters:
+      - description: User login input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully logged in with JWT token
+          schema:
+            $ref: '#/definitions/controller.AuthResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      summary: User login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a user to log in by providing a valid username
+        and password.
+      parameters:
+      - description: User register input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully registered in with JWT token
+          schema:
+            $ref: '#/definitions/controller.AuthResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      summary: User register
+      tags:
+      - auth
+  /messages:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint lists messages by providing limit and skip.
+      parameters:
+      - description: Messages limit
+        in: query
+        name: limit
+        type: integer
+      - description: Skip messages
+        in: query
+        name: skip
+        type: integer
+      - description: Receiver id
+        in: query
+        name: receiver_id
+        type: string
+      - description: Sender id
+        in: query
+        name: sender_id
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: messages
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: List lists messages
+      tags:
+      - messages
+    post:
+      consumes:
+      - application/json
+      description: This endpoint creates a new message by providing sender id, receiver
+        id, text, and status.
+      parameters:
+      - description: Message creation input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.MessageCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: message id
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create creates a new message
+      tags:
+      - messages
+  /messages/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint gets a message by providing message id.
+      parameters:
+      - description: Message id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: message
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: GetByID gets a message by id
+      tags:
+      - messages
+    patch:
+      consumes:
+      - application/json
+      description: This endpoint updates a message by providing message id, sender
+        id, receiver id, text, and status.
+      parameters:
+      - description: Message id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Message update input, status= pending:1, approved:2, rejected:3
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.MessageUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: message id
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update updates an existing message
+      tags:
+      - messages
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint creates a new user by providing username, email,
+        password, and role ID.
+      parameters:
+      - description: User creation input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: user username
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create creates a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint deletes a user by providing user id.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user username
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteUser deletes an existing user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Fetches a user by their unique ID from the database.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response containing the user information
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: This endpoint updates a user by providing username, email, password,
+        and role ID.
+      parameters:
+      - description: User update input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user username
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Error message including details on failure
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+        "500":
+          description: Interval error
+          schema:
+            $ref: '#/definitions/controller.FailureResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateUser updates an existing user
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type \"Bearer \" and then your API Token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -55,3 +55,14 @@ To start the services, run the following command:
 ```bash
 docker compose up -d
 ```
+
+## Postman Import
+
+To import the collection and environment into Postman, follow these steps:
+
+1. Open Postman
+2. Click the `Import` button in the top left corner
+3. Select `Import From Link` and paste the link:
+   - `https://raw.githubusercontent.com/fleimkeipa/maker-checker/main/postman-exports/Maker-Checker.postman_collection.json`
+4. Click `Import`
+5. Click `Import` again to import the environment file

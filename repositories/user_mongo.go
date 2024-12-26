@@ -55,11 +55,20 @@ func (rc *UserMongoRepo) Update(ctx context.Context, userID string, user *model.
 		return nil, fmt.Errorf("failed to convert id: %w", err)
 	}
 
+	updateUser, err := rc.internalToMongo(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert user: %w", err)
+	}
+
+	updateDocs := bson.M{
+		"$set": updateUser,
+	}
+
 	filter := bson.M{"_id": oID}
 	query, err := rc.
 		db.
 		Collection(userColl).
-		UpdateOne(ctx, user, filter)
+		UpdateOne(ctx, updateDocs, filter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
@@ -68,7 +77,7 @@ func (rc *UserMongoRepo) Update(ctx context.Context, userID string, user *model.
 		return nil, fmt.Errorf("not found user with id: %v", userID)
 	}
 
-	return user, nil
+	return rc.mongoToInternal(updateUser), nil
 }
 
 func (rc *UserMongoRepo) Delete(ctx context.Context, id string) error {
@@ -105,7 +114,7 @@ func (rc *UserMongoRepo) GetByID(ctx context.Context, userID string) (*model.Use
 		return nil, fmt.Errorf("failed to convert user id: %w", err)
 	}
 
-	user := new(model.User)
+	user := new(userMongo)
 	err = rc.
 		db.
 		Collection(userColl).
@@ -115,7 +124,7 @@ func (rc *UserMongoRepo) GetByID(ctx context.Context, userID string) (*model.Use
 		return nil, err
 	}
 
-	return user, nil
+	return rc.mongoToInternal(user), nil
 }
 
 func (rc *UserMongoRepo) GetByUsernameOrEmail(ctx context.Context, usernameOrEmail string) (*model.User, error) {
@@ -129,7 +138,7 @@ func (rc *UserMongoRepo) GetByUsernameOrEmail(ctx context.Context, usernameOrEma
 			{"email": usernameOrEmail},
 		},
 	}
-	user := new(model.User)
+	user := new(userMongo)
 	err := rc.
 		db.
 		Collection(userColl).
@@ -139,7 +148,7 @@ func (rc *UserMongoRepo) GetByUsernameOrEmail(ctx context.Context, usernameOrEma
 		return nil, err
 	}
 
-	return user, nil
+	return rc.mongoToInternal(user), nil
 }
 
 func (rc *UserMongoRepo) Exists(ctx context.Context, usernameOrEmail string) (bool, error) {

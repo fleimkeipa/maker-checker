@@ -56,30 +56,6 @@ func ValidateJWT(c echo.Context) error {
 	return nil
 }
 
-// GetUserIDOnToken return user id
-func GetUserIDOnToken(c echo.Context) (string, error) {
-	token, err := getToken(c)
-	if err != nil {
-		return "", err
-	}
-
-	if !token.Valid {
-		return "", errors.New("invalid token")
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return "", errors.New("invalid token claims")
-	}
-
-	id, ok := claims["id"].(string)
-	if !ok {
-		return "", errors.New("invalid id claims")
-	}
-
-	return id, nil
-}
-
 // GetOwnerFromToken returns the owner details from the JWT token
 func GetOwnerFromToken(c echo.Context) (model.TokenOwner, error) {
 	token, err := getToken(c)

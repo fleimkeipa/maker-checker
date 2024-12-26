@@ -84,12 +84,6 @@ func serveApplication() {
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
-// func loadConfig() {
-// 	if err := godotenv.Load(); err != nil {
-// 		log.Fatalf("Error loading .env file: %v", err)
-// 	}
-// }
-
 // Configures the Echo instance
 func configureEcho(e *echo.Echo) {
 	e.HideBanner = true
